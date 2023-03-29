@@ -1,7 +1,7 @@
 -   id: check-lincc-frameworks-template-version
     name: Check LINCC Frameworks template version
     description: Compares local template version to latest available version.
-    entry: src.check_template_version.check_template_version
+    entry: check-lincc-frameworks-template-version
     language: python
     pass_filename: false
     always_run: true

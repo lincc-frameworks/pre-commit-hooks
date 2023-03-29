@@ -8,14 +8,15 @@ want to make them aware that they could update their template version.
 Thus if there are any exceptions raise, we should just treat it as though the 
 test passed and return 0.
 """
+import argparse
+import git
 import os
 import yaml
-import git
+from typing import Sequence
 from packaging.version import parse, InvalidVersion
 
-def main():
+def check_version(template_url:str) -> int:
     """The main method"""
-    
     copier_answers_file = ".copier-answers.yml"
 
     # If we can't find the file, we'll just return 0 and move on
@@ -39,8 +40,7 @@ def main():
     # use a very broad `Exception` class to return 0.
     try:
         g = git.cmd.Git()
-        repository = "https://github.com/lincc-frameworks/python-project-template"
-        blob = g.ls_remote(repository, sort="-v:refname", tags=True)
+        blob = g.ls_remote(template_url, sort="-v:refname", tags=True)
     except Exception:
         return 0
 
@@ -56,6 +56,22 @@ def main():
         print("copier update")
 
     return 0
+
+def main(argv: Sequence[str] | None = None) -> int:
+    """Parse input arguments and return results of `check_version`"""
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-r", "--remote", action="append",
+                        help="The repository URL for the template")
+
+    args = parser.parse_args(argv)
+
+    lincc_template_url = "https://github.com/lincc-frameworks/python-project-template"
+    template_url = frozenset(args.remote or lincc_template_url)
+    try:
+        return check_version(template_url)
+    except Exception:
+        return 0
 
 if __name__ == '__main__':
     SystemExit(main())

@@ -32,6 +32,9 @@ dev = [
     "black", # Used for static linting of files
 ]
 
+[project.scripts]
+    check-lincc-frameworks-template-version = "check_template_version.check_template_version:main"
+
 [build-system]
 requires = [
     "setuptools>=45", # Used to build and package the Python project
@@ -44,5 +47,3 @@ write_to = "src/check_template_version/_version.py"
 
 [tool.black]
 line-length = 110
-
-
