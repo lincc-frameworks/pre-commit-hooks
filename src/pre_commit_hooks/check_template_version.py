@@ -12,11 +12,13 @@ test passed and return 0.
 import argparse
 import os
 from typing import Sequence
+
 import git
 import yaml
-from packaging.version import parse, InvalidVersion
+from packaging.version import InvalidVersion, parse
 
-def check_version(template_url:str, copier_answers_file:str) -> int:
+
+def check_version(template_url: str, copier_answers_file: str) -> int:
     """The main method"""
 
     # If we can't find the file, we'll just return 0 and move on
@@ -46,7 +48,7 @@ def check_version(template_url:str, copier_answers_file:str) -> int:
 
     # If the version parsing fails, or the splitting/indexing fails, return 0
     try:
-        latest_remote_version = parse(blob.split('\n')[0].split('/')[-1])
+        latest_remote_version = parse(blob.split("\n")[0].split("/")[-1])
     except (InvalidVersion, IndexError):
         return 0
 
@@ -57,17 +59,22 @@ def check_version(template_url:str, copier_answers_file:str) -> int:
 
     return 0
 
+
 def main(argv: Sequence[str] | None = None) -> int:
     """Parse input arguments and return results of `check_version`"""
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("--template-url",
-                        default="https://github.com/lincc-frameworks/python-project-template",
-                        help="The repository URL for the template")
+    parser.add_argument(
+        "--template-url",
+        default="https://github.com/lincc-frameworks/python-project-template",
+        help="The repository URL for the template",
+    )
 
-    parser.add_argument("--copier-answers-file",
-                        default=".copier-answers.yml",
-                        help="The name of the copier answers file. Typically .copier-answers.yml")
+    parser.add_argument(
+        "--copier-answers-file",
+        default=".copier-answers.yml",
+        help="The name of the copier answers file. Typically .copier-answers.yml",
+    )
 
     args = parser.parse_args(argv)
 
@@ -76,5 +83,6 @@ def main(argv: Sequence[str] | None = None) -> int:
     except Exception:
         return 0
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     SystemExit(main())
