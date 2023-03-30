@@ -33,7 +33,7 @@ dev = [
 ]
 
 [project.scripts]
-    check-lincc-frameworks-template-version = "check_template_version.check_template_version:main"
+    check-lincc-frameworks-template-version = "pre_commit_hooks.check_template_version:main"
 
 [build-system]
 requires = [
@@ -43,7 +43,7 @@ requires = [
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools_scm]
-write_to = "src/check_template_version/_version.py"
+write_to = "src/pre_commit_hooks/_version.py"
 
 [tool.black]
 line-length = 110

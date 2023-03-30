@@ -1,4 +1,4 @@
-# template-version-check
+# LINCC Frameworks Pre-Commit Hooks for Python Project Template
 
 [![Template](https://img.shields.io/badge/Template-LINCC%20Frameworks%20Python%20Project%20Template-brightgreen)](https://lincc-ppt.readthedocs.io/en/latest/)
 
