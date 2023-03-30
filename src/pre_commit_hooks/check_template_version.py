@@ -1,4 +1,5 @@
-"""This module is meant to be used in a pre-commit check.
+"""This module is meant to be used in a pre-commit check for projects created 
+from a Copier template.
 It compares the local template version against the remote template version. 
 It prints a message to the screen if the user should update their template.
 It will always pass the pre-commit check, i.e. it will always return 0.
@@ -9,15 +10,14 @@ Thus if there are any exceptions raise, we should just treat it as though the
 test passed and return 0.
 """
 import argparse
-import git
 import os
-import yaml
 from typing import Sequence
+import git
+import yaml
 from packaging.version import parse, InvalidVersion
 
-def check_version(template_url:str) -> int:
+def check_version(template_url:str, copier_answers_file:str) -> int:
     """The main method"""
-    copier_answers_file = ".copier-answers.yml"
 
     # If we can't find the file, we'll just return 0 and move on
     if not os.path.isfile(copier_answers_file):
@@ -61,15 +61,18 @@ def main(argv: Sequence[str] | None = None) -> int:
     """Parse input arguments and return results of `check_version`"""
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("-r", "--remote", action="append",
+    parser.add_argument("--template-url",
+                        default="https://github.com/lincc-frameworks/python-project-template",
                         help="The repository URL for the template")
+
+    parser.add_argument("--copier-answers-file",
+                        default=".copier-answers.yml",
+                        help="The name of the copier answers file. Typically .copier-answers.yml")
 
     args = parser.parse_args(argv)
 
-    lincc_template_url = "https://github.com/lincc-frameworks/python-project-template"
-    template_url = frozenset(args.remote or lincc_template_url)
     try:
-        return check_version(lincc_template_url)
+        return check_version(args.template_url, args.copier_answers_file)
     except Exception:
         return 0
 
