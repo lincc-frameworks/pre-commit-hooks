@@ -69,7 +69,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     lincc_template_url = "https://github.com/lincc-frameworks/python-project-template"
     template_url = frozenset(args.remote or lincc_template_url)
     try:
-        return check_version(template_url)
+        return check_version(lincc_template_url)
     except Exception:
         return 0
 

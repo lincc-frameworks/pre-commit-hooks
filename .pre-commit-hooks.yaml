@@ -3,5 +3,4 @@
     description: Compares local template version to latest available version.
     entry: check-lincc-frameworks-template-version
     language: python
-    pass_filename: false
     always_run: true
