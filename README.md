@@ -37,9 +37,10 @@ Check template version...................................................Passed
 - hook id: check-lincc-frameworks-template-version
 - duration: 0.59s
 
-Time to update your template version from 1.3.0 -> 1.3.1
-Run the following command to update your template.
-copier update
+A new version of your project template is available!
+Your version (1.3.0) is older than the latest (1.3.1)
+Run the following command to update your template: copier
+For more information see the documentation: https://lincc-ppt.readthedocs.io/en/latest/source/update_project.html
 ```
 
 
