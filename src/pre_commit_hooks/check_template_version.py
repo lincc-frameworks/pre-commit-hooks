@@ -9,6 +9,8 @@ want to make them aware that they could update their template version.
 Thus if there are any exceptions raise, we should just treat it as though the 
 test passed and return 0.
 """
+from __future__ import annotations
+
 import argparse
 import os
 from typing import Sequence
