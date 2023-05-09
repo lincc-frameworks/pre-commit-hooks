@@ -13,7 +13,7 @@ from __future__ import annotations
 
 import argparse
 import os
-from typing import Sequence
+from typing import Sequence, Union
 
 import git
 import yaml
@@ -119,7 +119,7 @@ def check_version(copier_answers_file: str) -> int:
         return 0
 
 
-def main(argv: Sequence[str] | None = None) -> int:
+def main(argv: Union[Sequence[str], None] = None) -> int:
     """Parse input arguments and return results of `check_version`"""
 
     parser = argparse.ArgumentParser()
