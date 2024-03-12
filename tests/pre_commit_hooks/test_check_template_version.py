@@ -2,6 +2,7 @@
 
 import pytest
 from packaging.version import Version
+
 from pre_commit_hooks import FriendlyException, check_template_version
 
 
@@ -63,6 +64,7 @@ def test_get_template_url_with_str_replace():
 
 
 def test_parse_git_blog():
+    # pylint: disable=line-too-long
     test_blob = "cc9babf3057ec04cdffc7d8b2edce212d589a255\trefs/tags/v1.3.1\nb2a26468a6ad00573b4c61948b6959a08a25938e\trefs/tags/v1.3.0\n341bf28af7e3b167e53a7643bc42ceb5db341ab5\trefs/tags/v1.2.1\nbd1a5522f324b77984873f517364c8ce59d2e44b\trefs/tags/v1.1.0\n5c4250154fd5ceddb8c75b25f8eb690c0914dc28\trefs/tags/v1.0.0\nebb241dacaefab8d57d424dabb463cbce9f4df88\trefs/tags/v0.0.6\n3968ff997296c1b5c1b5965579173cb91ae2afcf\trefs/tags/v0.0.5\n1f2e6e938ceeb4f5c0407a798edf8598b50123a7\trefs/tags/v0.0.4\n859bbfbfa354aafba9d0bc83c8d060211bade1a7\trefs/tags/v0.0.3\nb47caea55a20285fecf3a2f17e3eed3e5db0274a\trefs/tags/v0.0.2\n51b8601c413fab872d31d8f9cc78c8510c2e2e54\trefs/tags/v0.0.1\nfb6197d45acc6cc547b474ab6b878297b4641ff5\trefs/tags/1.2.0"
     expected_version = Version("v1.3.1")
     output_version = check_template_version._parse_git_blob(test_blob)
@@ -91,6 +93,7 @@ def test_parse_git_blog_no_tag():
 
 
 def test_get_latest_remote_version(mocker):
+    # pylint: disable=line-too-long
     test_blob = "cc9babf3057ec04cdffc7d8b2edce212d589a255\trefs/tags/v1.3.1\nb2a26468a6ad00573b4c61948b6959a08a25938e\trefs/tags/v1.3.0\n341bf28af7e3b167e53a7643bc42ceb5db341ab5\trefs/tags/v1.2.1\nbd1a5522f324b77984873f517364c8ce59d2e44b\trefs/tags/v1.1.0\n5c4250154fd5ceddb8c75b25f8eb690c0914dc28\trefs/tags/v1.0.0\nebb241dacaefab8d57d424dabb463cbce9f4df88\trefs/tags/v0.0.6\n3968ff997296c1b5c1b5965579173cb91ae2afcf\trefs/tags/v0.0.5\n1f2e6e938ceeb4f5c0407a798edf8598b50123a7\trefs/tags/v0.0.4\n859bbfbfa354aafba9d0bc83c8d060211bade1a7\trefs/tags/v0.0.3\nb47caea55a20285fecf3a2f17e3eed3e5db0274a\trefs/tags/v0.0.2\n51b8601c413fab872d31d8f9cc78c8510c2e2e54\trefs/tags/v0.0.1\nfb6197d45acc6cc547b474ab6b878297b4641ff5\trefs/tags/1.2.0"
     template_url = "https://github.com/example/repo"
     mocker.patch("pre_commit_hooks.check_template_version._retrieve_git_remote_tags", return_value=test_blob)
@@ -113,13 +116,13 @@ def test_compare_versions():
     version_string = "v1.3.1"
     local_version = Version(version_string)
     remote_version = Version(version_string)
-    assert check_template_version._compare_versions(local_version, remote_version) == 0
+    assert check_template_version._compare_versions(local_version, remote_version)
 
 
 def test_compare_versions_out_of_date(capfd):
     local_version = Version("v1.2.0")
     remote_version = Version("v1.3.1")
-    check_template_version._compare_versions(local_version, remote_version)
+    assert not check_template_version._compare_versions(local_version, remote_version)
     out, _ = capfd.readouterr()
     assert "A new version" in str(out)
 
@@ -127,12 +130,12 @@ def test_compare_versions_out_of_date(capfd):
 def test_compare_versions_local_ahead():
     local_version = Version("v1.4.0")
     remote_version = Version("v1.3.0")
-    assert check_template_version._compare_versions(local_version, remote_version) == 0
+    assert check_template_version._compare_versions(local_version, remote_version)
 
 
 def test_compare_versions_wrong_type():
     version_string = "v1.3.1"
     remote_version = Version(version_string)
     with pytest.raises(FriendlyException) as exc:
-        check_template_version._compare_versions(version_string, remote_version)
+        assert not check_template_version._compare_versions(version_string, remote_version)
         assert "Failed to compare" in str(exc.value)

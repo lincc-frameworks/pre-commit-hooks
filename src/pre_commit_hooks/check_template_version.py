@@ -9,6 +9,7 @@ want to make them aware that they could update their template version.
 Thus if there are any exceptions raise, we should just treat it as though the 
 test passed and return 0.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -69,7 +70,7 @@ def _parse_git_blob(git_ls_remote_blob: str) -> Version:
         raise FriendlyException("Parsing the results of git ls-remote failed") from exc
 
 
-def _compare_versions(local_template_version: Version, latest_remote_version: Version) -> None:
+def _compare_versions(local_template_version: Version, latest_remote_version: Version) -> bool:
     try:
         if local_template_version < latest_remote_version:
             print("A new version of your project template is available!")
@@ -78,12 +79,13 @@ def _compare_versions(local_template_version: Version, latest_remote_version: Ve
             )
             print("Run the following command to update your template: \033[91mcopier\033[0m")
             print(
-                "For more information see the documentation: https://lincc-ppt.readthedocs.io/en/latest/source/update_project.html"
+                "For more information see the documentation: ",
+                "https://lincc-ppt.readthedocs.io/en/latest/source/update_project.html",
             )
-        else:
-            return 0
-    except Exception:
-        raise FriendlyException("Failed to compare verisons")
+            return False
+        return True
+    except Exception as exc:
+        raise FriendlyException("Failed to compare verisons") from exc
 
 
 def check_version(copier_answers_file: str) -> int:
@@ -102,23 +104,13 @@ def check_version(copier_answers_file: str) -> int:
 
     try:
         local_copier_version = _get_template_version(copier_config)
-    except FriendlyException:
-        return 0
-
-    try:
         template_url = _get_template_path(copier_config)
-    except FriendlyException:
-        return 0
-
-    try:
         latest_remote_version = _get_latest_remote_version(template_url)
-    except FriendlyException:
-        return 0
-
-    try:
         _compare_versions(local_copier_version, latest_remote_version)
     except FriendlyException:
         return 0
+
+    return 0
 
 
 def main(argv: Union[Sequence[str], None] = None) -> int:
@@ -144,4 +136,4 @@ def main(argv: Union[Sequence[str], None] = None) -> int:
 
 
 if __name__ == "__main__":
-    SystemExit(main())
+    raise SystemExit(main())

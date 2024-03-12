@@ -27,10 +27,11 @@ dependencies = [
 # On a mac, install optional dependencies with `pip install '.[dev]'` (include the single quotes)
 [project.optional-dependencies]
 dev = [
+    "black",
     "pytest",
     "pytest-mock", # Used to mock out functions
     "pre-commit", # Used to run checks before finalizing a git commit
-    "ruff",
+    "pylint",
 ]
 
 [project.scripts]
