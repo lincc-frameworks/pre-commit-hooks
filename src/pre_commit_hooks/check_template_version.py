@@ -136,4 +136,5 @@ def main(argv: Union[Sequence[str], None] = None) -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    # pylint: disable=pointless-exception-statement
+    SystemExit(main())
