@@ -13,7 +13,8 @@ from __future__ import annotations
 
 import argparse
 import os
-from typing import Sequence, Union
+from collections.abc import Sequence
+from typing import Union
 
 import git
 import yaml
@@ -21,7 +22,8 @@ from packaging.version import InvalidVersion, Version, parse
 
 
 class FriendlyException(Exception):
-    "Something went wrong, but we don't want to block committing."
+    """Something went wrong, but we don't want to block committing."""
+
     pass
 
 
@@ -31,14 +33,14 @@ def _does_file_exist(copier_answer_file: str) -> bool:
 
 def _get_template_version(copier_config: dict) -> Version:
     try:
-        return parse(copier_config.get("_commit", None))
+        return parse(copier_config.get("_commit"))
     except (TypeError, InvalidVersion) as exc:
         raise FriendlyException("Cannot parse version string") from exc
 
 
 def _get_template_path(copier_config: dict) -> str:
     try:
-        template_url = copier_config.get("_src_path", None)
+        template_url = copier_config.get("_src_path")
         return template_url.replace("gh://", "https://github.com/")
     except AttributeError as exc:
         raise FriendlyException("Cannot return _src_path for copier answers") from exc
@@ -80,7 +82,7 @@ def _compare_versions(local_template_version: Version, latest_remote_version: Ve
             )
         else:
             return 0
-    except Exception as exc:
+    except Exception:
         raise FriendlyException("Failed to compare verisons")
 
 

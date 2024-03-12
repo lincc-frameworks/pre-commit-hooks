@@ -1,8 +1,7 @@
 """Unit tests for check_template_version pre-commit hook"""
 
 import pytest
-from packaging.version import InvalidVersion, Version
-
+from packaging.version import Version
 from pre_commit_hooks import FriendlyException, check_template_version
 
 
@@ -114,7 +113,7 @@ def test_compare_versions():
     version_string = "v1.3.1"
     local_version = Version(version_string)
     remote_version = Version(version_string)
-    assert 0 == check_template_version._compare_versions(local_version, remote_version)
+    assert check_template_version._compare_versions(local_version, remote_version) == 0
 
 
 def test_compare_versions_out_of_date(capfd):
@@ -128,7 +127,7 @@ def test_compare_versions_out_of_date(capfd):
 def test_compare_versions_local_ahead():
     local_version = Version("v1.4.0")
     remote_version = Version("v1.3.0")
-    assert 0 == check_template_version._compare_versions(local_version, remote_version)
+    assert check_template_version._compare_versions(local_version, remote_version) == 0
 
 
 def test_compare_versions_wrong_type():

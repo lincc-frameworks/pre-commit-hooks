@@ -1,15 +1,22 @@
 # Changes here will be overwritten by Copier
-_commit: v1.3.0
+_commit: v2.0.1
 _src_path: gh://lincc-frameworks/python-project-template
 author_email: lincc-frameworks-team@lists.lsst.org
 author_name: LINCC Frameworks
-create_example_module: true
+create_example_module: false
 custom_install: true
-include_notebooks: false
-module_name: check_template_version
+enforce_style:
+- ruff_lint
+- ruff_format
+failure_notification: []
+include_benchmarks: false
+include_docs: false
 mypy_type_checking: none
-preferred_linter: black
+package_name: pre_commit_hooks
 project_license: BSD
 project_name: template-version-check
-use_gitlfs: none
-use_isort: true
+project_organization: lincc-frameworks
+python_versions:
+- '3.9'
+- '3.10'
+- '3.11'
