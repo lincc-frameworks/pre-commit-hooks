@@ -42,7 +42,13 @@ def _get_template_version(copier_config: dict) -> Version:
 def _get_template_path(copier_config: dict) -> str:
     try:
         template_url = copier_config.get("_src_path")
-        return template_url.replace("gh://", "https://github.com/")
+        if template_url is None:
+            raise FriendlyException("Cannot return _src_path for copier answers")
+        if template_url[:5] == "gh://":
+            return template_url.replace("gh://", "https://github.com/", 1)
+        if template_url[:3] == "gh:":
+            return template_url.replace("gh:", "https://github.com/", 1)
+        return template_url
     except AttributeError as exc:
         raise FriendlyException("Cannot return _src_path for copier answers") from exc
 

@@ -27,17 +27,15 @@ def test_get_template_version():
 def test_get_template_version_no_commit():
     version_string = "v1.3.0"
     copier_config = {"_nothing": version_string}
-    with pytest.raises(FriendlyException) as exc:
-        _ = check_template_version._get_template_version(copier_config)
-        assert "Cannot parse version string" in str(exc.value)
+    with pytest.raises(FriendlyException, match="Cannot parse version string"):
+        check_template_version._get_template_version(copier_config)
 
 
 def test_get_template_version_invalid_version():
     version_string = "bogus_version_id"
     copier_config = {"_commit": version_string}
-    with pytest.raises(FriendlyException) as exc:
-        _ = check_template_version._get_template_version(copier_config)
-        assert "Cannot parse version string" in str(exc.value)
+    with pytest.raises(FriendlyException, match="Cannot parse version string"):
+        check_template_version._get_template_version(copier_config)
 
 
 def test_get_template_url():
@@ -50,13 +48,18 @@ def test_get_template_url():
 def test_get_template_url_no_src():
     template_url = "https://github.com/example/repo"
     copier_config = {"_nothing": template_url}
-    with pytest.raises(FriendlyException) as exc:
-        _ = check_template_version._get_template_path(copier_config)
-        assert "Cannot return _src_path" in str(exc.value)
+    with pytest.raises(FriendlyException, match="Cannot return _src_path"):
+        check_template_version._get_template_path(copier_config)
 
 
 def test_get_template_url_with_str_replace():
     template_url = "gh://example/repo"
+    expected_url = "https://github.com/example/repo"
+    copier_config = {"_src_path": template_url}
+    extracted_url = check_template_version._get_template_path(copier_config)
+    assert extracted_url == expected_url
+
+    template_url = "gh:example/repo"
     expected_url = "https://github.com/example/repo"
     copier_config = {"_src_path": template_url}
     extracted_url = check_template_version._get_template_path(copier_config)
@@ -73,23 +76,20 @@ def test_parse_git_blog():
 
 def test_parse_git_blob_none_blob():
     test_blob = None
-    with pytest.raises(FriendlyException) as exc:
-        _ = check_template_version._parse_git_blob(test_blob)
-        assert "Parsing the results of git ls-remote failed" in str(exc.value)
+    with pytest.raises(FriendlyException, match="Parsing the results of git ls-remote failed"):
+        check_template_version._parse_git_blob(test_blob)
 
 
 def test_parse_git_blob_empty_blob():
     test_blob = ""
-    with pytest.raises(FriendlyException) as exc:
-        _ = check_template_version._parse_git_blob(test_blob)
-        assert "Parsing the results of git ls-remote failed" in str(exc.value)
+    with pytest.raises(FriendlyException, match="Parsing the results of git ls-remote failed"):
+        check_template_version._parse_git_blob(test_blob)
 
 
 def test_parse_git_blog_no_tag():
     test_blob = "cc9babf3057ec04cdffc7d8b2edce212d589a255\trefs/tags"
-    with pytest.raises(FriendlyException) as exc:
-        _ = check_template_version._parse_git_blob(test_blob)
-        assert "Parsing the results of git ls-remote failed" in str(exc.value)
+    with pytest.raises(FriendlyException, match="Parsing the results of git ls-remote failed"):
+        check_template_version._parse_git_blob(test_blob)
 
 
 def test_get_latest_remote_version(mocker):
@@ -107,9 +107,8 @@ def test_get_latest_remote_version_with_parse_failure(mocker):
     mocker.patch(
         "pre_commit_hooks.check_template_version._retrieve_git_remote_tags", side_effect=FriendlyException()
     )
-    with pytest.raises(FriendlyException) as exc:
-        _ = check_template_version._get_latest_remote_version(template_url)
-        assert "Failed to get latest version" in str(exc.value)
+    with pytest.raises(FriendlyException, match="Failed to get latest version"):
+        check_template_version._get_latest_remote_version(template_url)
 
 
 def test_compare_versions():
@@ -136,6 +135,5 @@ def test_compare_versions_local_ahead():
 def test_compare_versions_wrong_type():
     version_string = "v1.3.1"
     remote_version = Version(version_string)
-    with pytest.raises(FriendlyException) as exc:
-        assert not check_template_version._compare_versions(version_string, remote_version)
-        assert "Failed to compare" in str(exc.value)
+    with pytest.raises(FriendlyException, match="Failed to compare"):
+        check_template_version._compare_versions(version_string, remote_version)
