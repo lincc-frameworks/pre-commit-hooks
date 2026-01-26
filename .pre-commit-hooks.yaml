@@ -5,3 +5,10 @@
     language: python
     pass_filenames: false
     always_run: true
+-   id: pre-executed-nb-never-execute
+    name: Check pre-executed notebooks
+    description: Confirm that notebooks that are pre-executed contain "nbsphinx" metadata where "execute"="never"
+    entry: pre-executed-nb-never-execute
+    language: python
+    pass_filenames: true
+    always_run: true
