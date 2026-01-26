@@ -18,6 +18,7 @@ project_license: BSD
 project_name: template-version-check
 project_organization: lincc-frameworks
 python_versions:
+- '3.9'
 - '3.10'
 - '3.11'
 - '3.12'
