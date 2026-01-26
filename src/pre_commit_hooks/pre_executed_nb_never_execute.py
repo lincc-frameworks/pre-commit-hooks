@@ -73,7 +73,7 @@ def main(argv=None) -> int:
 
     notebooks = find_notebooks(Path(argv))
     if len(notebooks) == 0:
-        print(f"No notebooks found at path {str(argv)}.")
+        logging.warning(f"No notebooks found at path {str(argv)}.")
         return 0
 
     # If pre-scan passed, perform modifications safely.
