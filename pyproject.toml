@@ -37,7 +37,7 @@ dev = [
 
 [project.scripts]
 check-lincc-frameworks-template-version = "pre_commit_hooks.check_template_version:main"
-pre-executed-nb-never-execute = "pre_commit.pre_executed_nb_never_execute:main"
+pre-executed-nb-never-execute = "pre_commit_hooks.pre_executed_nb_never_execute:main"
 
 [build-system]
 requires = [
