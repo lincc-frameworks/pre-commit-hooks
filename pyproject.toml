@@ -23,7 +23,7 @@ dependencies = [
 ]
 
 [project.urls]
-"Source Code" = "https://github.com/lincc-frameworks/template-version-check"
+"Source Code" = "https://github.com/lincc-frameworks/pre-commit-hooks"
 
 # On a mac, install optional dependencies with `pip install '.[dev]'` (include the single quotes)
 [project.optional-dependencies]
@@ -36,7 +36,8 @@ dev = [
 ]
 
 [project.scripts]
-    check-lincc-frameworks-template-version = "pre_commit_hooks.check_template_version:main"
+check-lincc-frameworks-template-version = "pre_commit_hooks.check_template_version:main"
+pre-executed-nb-never-execute = "pre_commit.pre_executed_nb_never_execute:main"
 
 [build-system]
 requires = [
