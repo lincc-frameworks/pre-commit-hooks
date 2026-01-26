@@ -20,7 +20,7 @@ ROOT = Path(__file__).resolve().parent.parent
 TARGET_DIR = ROOT / "docs" / "pre_executed"
 
 
-def find_notebooks(dirpath: Path) -> list[Path]:
+def _find_notebooks(dirpath: Path) -> list[Path]:
     if not dirpath.exists():
         return []
     return sorted(dirpath.glob("*.ipynb"))
@@ -43,14 +43,16 @@ def ensure_nbsphinx_execute_never(notebook_path: Path) -> bool:
 
     if not isinstance(nbsphinx, dict):
         raise RuntimeError(
-            f"Notebook {notebook_path} has metadata.nbsphinx of type {type(nbsphinx).__name__}; expected a mapping"
+            f"Notebook {notebook_path} has metadata.nbsphinx "
+            "of type {type(nbsphinx).__name__}; expected a mapping"
         )
 
     if "execute" in nbsphinx:
         if nbsphinx["execute"] == "never":
             return False
         raise RuntimeError(
-            f"Notebook {notebook_path} has metadata.nbsphinx.execute={nbsphinx.get('execute')!r}; expected 'never'"
+            f"Notebook {notebook_path} has "
+            "metadata.nbsphinx.execute={nbsphinx.get('execute')!r}; expected 'never'"
         )
 
     nbsphinx["execute"] = "never"
@@ -58,12 +60,16 @@ def ensure_nbsphinx_execute_never(notebook_path: Path) -> bool:
     with notebook_path.open("w") as fh:
         json.dump(nb, fh, indent=1, sort_keys=True, ensure_ascii=False)
 
-    logging.warning(f"Modified notebook to set nbsphinx.execute='never': {notebook_path}")
+    logging.warning("Modified notebook to set nbsphinx.execute='never': %s", notebook_path)
 
     return True
 
 
 def main(argv=None) -> int:
+    """Main method for execution.
+
+    Finds notebooks in the target directory, and scans each for nbsphinx execute metadata.
+    """
     logging.basicConfig(level=logging.WARNING, format="%(message)s")
 
     if argv is None and len(sys.argv) > 1:
@@ -71,9 +77,9 @@ def main(argv=None) -> int:
     if argv is None:
         argv = TARGET_DIR
 
-    notebooks = find_notebooks(Path(argv))
+    notebooks = _find_notebooks(Path(argv))
     if len(notebooks) == 0:
-        logging.warning(f"No notebooks found at path {str(argv)}.")
+        logging.warning("No notebooks found at path %s.", str(argv))
         return 0
 
     # If pre-scan passed, perform modifications safely.

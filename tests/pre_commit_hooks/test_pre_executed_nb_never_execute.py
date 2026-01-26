@@ -46,7 +46,7 @@ def test_nb_empty_metadata(caplog, tmp_path):
     assert "empty_metadata.ipynb" in captured
 
 
-def test_nb_empty_metadata(caplog, tmp_path):
+def test_nb_no_metadata(caplog, tmp_path):
     notebook_path = tmp_path / "no_metadata.ipynb"
     with notebook_path.open("w") as fh:
         fh.write(
@@ -119,34 +119,25 @@ Hey man, this is just a readme.
     assert "ERROR" in captured
 
 
-def test_nb_no_argument(caplog, capsys):
+def test_nb_no_argument(caplog):
     result = pre_executed_nb_never_execute.main()
     assert result == 0
 
     captured = caplog.text
-    assert captured == ""
-
-    captured = capsys.readouterr().out
-    assert captured.startswith("No notebooks found at path")
+    assert "No notebooks found at path" in captured
 
 
-def test_nb_no_notebooks(caplog, capsys, tmp_path):
+def test_nb_no_notebooks(caplog, tmp_path):
     result = pre_executed_nb_never_execute.main(tmp_path)
     assert result == 0
 
     captured = caplog.text
-    assert captured == ""
-
-    captured = capsys.readouterr().out
-    assert captured.startswith("No notebooks found at path")
+    assert "No notebooks found at path" in captured
 
 
-def test_nb_dir_does_not_exist(caplog, capsys, tmp_path):
+def test_nb_dir_does_not_exist(caplog, tmp_path):
     result = pre_executed_nb_never_execute.main(tmp_path / "not_there")
     assert result == 0
 
     captured = caplog.text
-    assert captured == ""
-
-    captured = capsys.readouterr().out
-    assert captured.startswith("No notebooks found at path")
+    assert "No notebooks found at path" in captured
