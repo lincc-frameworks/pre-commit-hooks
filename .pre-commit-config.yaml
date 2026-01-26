@@ -1,9 +1,10 @@
+
 repos:
     # Compare the local template version to the latest remote template version
     # This hook should always pass. It will print a message if the local version 
     # is out of date.
   - repo: https://github.com/lincc-frameworks/pre-commit-hooks
-    rev: v0.1.1
+    rev: v0.1.2
     hooks:
       - id: check-lincc-frameworks-template-version
         name: Check template version
@@ -16,7 +17,8 @@ repos:
         name: Clear output from Jupyter notebooks
         description: Clear output from Jupyter notebooks.
         files: \.ipynb$
-        stages: [commit]
+        exclude: ^docs/pre_executed
+        stages: [pre-commit]
         language: system
         entry: jupyter nbconvert --clear-output
     # Prevents committing directly branches named 'main' and 'master'.
@@ -32,7 +34,7 @@ repos:
         args: ['--maxkb=500']
     # Verify that pyproject.toml is well formed
   - repo: https://github.com/abravalheri/validate-pyproject
-    rev: v0.12.1
+    rev: v0.24.1
     hooks:
       - id: validate-pyproject
         name: Validate pyproject.toml
@@ -92,7 +94,7 @@ repos:
         # supported by your project here, or alternatively use
         # pre-commit's default_language_version, see
         # https://pre-commit.com/#top_level-default_language_version
-        language_version: python3.10
+        language_version: python3.12
     # Run unit tests, verify that they pass. Note that coverage is run against
     # the ./src directory here because that is what will be committed. In the
     # github workflow script, the coverage is run against the installed package

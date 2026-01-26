@@ -1,12 +1,12 @@
-"""This module is meant to be used in a pre-commit check for projects created 
+"""This module is meant to be used in a pre-commit check for projects created
 from a Copier template.
-It compares the local template version against the remote template version. 
+It compares the local template version against the remote template version.
 It prints a message to the screen if the user should update their template.
 It will always pass the pre-commit check, i.e. it will always return 0.
 
-The central tenet here is that we don't want to block the users work. We only 
+The central tenet here is that we don't want to block the users work. We only
 want to make them aware that they could update their template version.
-Thus if there are any exceptions raise, we should just treat it as though the 
+Thus if there are any exceptions raise, we should just treat it as though the
 test passed and return 0.
 """
 
