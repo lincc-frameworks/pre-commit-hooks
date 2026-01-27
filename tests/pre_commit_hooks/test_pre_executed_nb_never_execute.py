@@ -4,8 +4,7 @@ from pre_commit_hooks import pre_executed_nb_never_execute
 def test_nb_never_metadata(caplog, capsys, tmp_path):
     notebook_path = tmp_path / "empty_metadata.ipynb"
     with notebook_path.open("w") as fh:
-        fh.write(
-            """{
+        fh.write("""{
 "metadata": {
   "nbsphinx": {
    "execute": "never"
@@ -14,8 +13,7 @@ def test_nb_never_metadata(caplog, capsys, tmp_path):
  "nbformat": 4,
  "nbformat_minor": 5
 }
-"""
-        )
+""")
     result = pre_executed_nb_never_execute.main(tmp_path)
     assert result == 0
 
@@ -29,15 +27,13 @@ def test_nb_never_metadata(caplog, capsys, tmp_path):
 def test_nb_empty_metadata(caplog, tmp_path):
     notebook_path = tmp_path / "empty_metadata.ipynb"
     with notebook_path.open("w") as fh:
-        fh.write(
-            """{
+        fh.write("""{
 "metadata": {
  },
  "nbformat": 4,
  "nbformat_minor": 5
 }
-"""
-        )
+""")
     result = pre_executed_nb_never_execute.main(tmp_path)
     assert result == 1
 
@@ -49,13 +45,11 @@ def test_nb_empty_metadata(caplog, tmp_path):
 def test_nb_no_metadata(caplog, tmp_path):
     notebook_path = tmp_path / "no_metadata.ipynb"
     with notebook_path.open("w") as fh:
-        fh.write(
-            """{
+        fh.write("""{
  "nbformat": 4,
  "nbformat_minor": 5
 }
-"""
-        )
+""")
     result = pre_executed_nb_never_execute.main(tmp_path)
     assert result == 1
 
@@ -67,16 +61,14 @@ def test_nb_no_metadata(caplog, tmp_path):
 def test_nb_always_executes(caplog, tmp_path):
     notebook_path = tmp_path / "always_execute.ipynb"
     with notebook_path.open("w") as fh:
-        fh.write(
-            """{
+        fh.write("""{
 "metadata": {
   "nbsphinx": {
    "execute": "always"
   }
  }
 }
-"""
-        )
+""")
     result = pre_executed_nb_never_execute.main(tmp_path)
     assert result == 1
 
@@ -88,14 +80,12 @@ def test_nb_always_executes(caplog, tmp_path):
 def test_nb_metadata_wrong_type(caplog, tmp_path):
     notebook_path = tmp_path / "wrong_metadata.ipynb"
     with notebook_path.open("w") as fh:
-        fh.write(
-            """{
+        fh.write("""{
 "metadata": {
   "nbsphinx": "never"
  }
 }
-"""
-        )
+""")
     result = pre_executed_nb_never_execute.main(tmp_path)
     assert result == 1
 
@@ -107,11 +97,9 @@ def test_nb_metadata_wrong_type(caplog, tmp_path):
 def test_nb_not_a_nb(caplog, tmp_path):
     notebook_path = tmp_path / "not_a_nb.ipynb"
     with notebook_path.open("w") as fh:
-        fh.write(
-            """# README
+        fh.write("""# README
 Hey man, this is just a readme.
-"""
-        )
+""")
     result = pre_executed_nb_never_execute.main(tmp_path)
     assert result == 1
 
